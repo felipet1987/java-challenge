@@ -68,7 +68,7 @@ public class SignUpEndpointShould {
     @Test
     void return_error_when_is_not_valid() {
         User request = User.builder().email("").build();
-        ErrorResponse expected = ErrorResponse.builder().mensaje("email no es valido").build();
+        ErrorResponse expected = ErrorResponse.builder().mensaje("Email no es valido").build();
 
         when(validation.isEmailValid("")).thenReturn(false);
         when(validation.isPaswordValid("")).thenReturn(true);
