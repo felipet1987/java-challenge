@@ -10,6 +10,9 @@ import cl.talavera.challenge.persistence.repository.PhoneRepository;
 import cl.talavera.challenge.persistence.repository.UserRepository;
 import cl.talavera.challenge.core.port.AuthDaoPort;
 import cl.talavera.challenge.core.domain.SignupSuccess;
+import cl.talavera.challenge.web.SignupEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
@@ -24,6 +27,8 @@ public class AuthDao implements AuthDaoPort {
     public static final DateFormat FORMAT = new SimpleDateFormat("dd-MM-yyyy");
     private final Timer timer;
 
+    Logger logger = LoggerFactory.getLogger(AuthDao.class);
+
     public AuthDao(UserRepository userRepository, PhoneRepository phoneRepository, JWT jwt, Timer timer) {
         this.userRepository = userRepository;
         this.phoneRepository = phoneRepository;
@@ -35,6 +40,8 @@ public class AuthDao implements AuthDaoPort {
 
     @Override
     public void signup(User user) {
+
+        logger.info("saving user data..." + user.getEmail());
 
         if(isDuplicate(user)){
             throw new RuntimeException("El correo ya registrado");
@@ -76,6 +83,8 @@ public class AuthDao implements AuthDaoPort {
 
     @Override
     public SignupSuccess signupSuccess(User request) {
+
+        logger.info("retrieve sign-up response..." + request.getEmail());
         UserModel u = userRepository.findByEmail(request.getEmail()).get();
         return SignupSuccess.builder()
                 .id(u.getId().toString())
